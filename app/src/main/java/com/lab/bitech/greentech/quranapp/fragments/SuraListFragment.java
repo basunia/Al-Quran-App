@@ -53,7 +53,7 @@ public class SuraListFragment extends Fragment {
         DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), HORIZONTAL);
         recyclerView.addItemDecoration(itemDecor);
 
-        Toast.makeText(getActivity(), "AYAt number" + surahNameList.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "AYAt number" + surahNameList.size(), Toast.LENGTH_SHORT).show();
 
         return view;
     }

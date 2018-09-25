@@ -83,7 +83,7 @@ public class SurahListAdapter extends RecyclerView.Adapter<SurahListAdapter.MyVi
         if (orientation == Surface.ROTATION_90
                 || orientation == Surface.ROTATION_270) {
             // TODO: add logic for landscape mode here
-            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolderDetail, new FragmentPagerHolder()).addToBackStack(null).commit();
+            //mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolderDetail, new FragmentPagerHolder()).addToBackStack(null).commit();
         } else {
             mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, new FragmentPagerHolder()).addToBackStack(null).commit();
         }

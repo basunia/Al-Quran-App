@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void sendPositionToPagerHolder(int position) {
+        FragmentPagerHolder mPagerHolder = (FragmentPagerHolder)getSupportFragmentManager().findFragmentById(R.id.fragmentHolderDetail);
+        mPagerHolder.updatePagerPosition(position);
 
     }
 
