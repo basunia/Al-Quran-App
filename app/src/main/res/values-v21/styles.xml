@@ -5,4 +5,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="themeUnderline" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:drawableBottom">@drawable/text_view_underline</item>
+        <item name="android:drawablePadding">0dp</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:paddingLeft">2dp</item>
+    </style>
 </resources>
