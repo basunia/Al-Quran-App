@@ -7,15 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lab.bitech.greentech.quranapp.R;
 import com.lab.bitech.greentech.quranapp.adapters.SurahDetailAdapter;
 import com.lab.bitech.greentech.quranapp.db.DataBank;
 import com.lab.bitech.greentech.quranapp.models.SurahDetailModel;
+import com.lab.bitech.greentech.quranapp.utils.Commons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +32,11 @@ public class SurahdetailFragment extends Fragment {
 
     @BindView(R.id.recyclerViewSurahDetail)
     RecyclerView recyclerView;
+    @BindView(R.id.tvSurahName)
+    TextView tvSurahName;
     List<SurahDetailModel> surahDetailModelList;
     SurahDetailAdapter adapter;
+    private int pagerPosition;
 
     @Nullable
     @Override
@@ -44,15 +50,25 @@ public class SurahdetailFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        DataBank dataBank = new DataBank(getActivity());
-        surahDetailModelList.addAll(dataBank.getSurahWithEnglishTranslation(1));
-        adapter.notifyDataSetChanged();
+        if (getArguments() != null) {
+            pagerPosition = getArguments().getInt(Commons.ITEM_POSITION, 1);
+            if ( 1 <= pagerPosition && pagerPosition <= 10)
+                fetchDatabase();
+            Log.d("Position", "PagerPosition " + pagerPosition);
+        }
 
         DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), HORIZONTAL);
         recyclerView.addItemDecoration(itemDecor);
 
-        Toast.makeText(getActivity(), "AYAt number" + surahDetailModelList.size(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "AYAt number" + surahDetailModelList.size(), Toast.LENGTH_SHORT).show();
 
         return view;
+    }
+
+    private void fetchDatabase() {
+        DataBank dataBank = new DataBank(getActivity());
+        tvSurahName.setText(dataBank.getSurah(pagerPosition).getSurahName());
+        surahDetailModelList.addAll(dataBank.getSurahWithEnglishTranslation(1));
+        adapter.notifyDataSetChanged();
     }
 }

@@ -5,17 +5,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lab.bitech.greentech.quranapp.FragmentCommunicator;
 import com.lab.bitech.greentech.quranapp.R;
 import com.lab.bitech.greentech.quranapp.utils.Commons;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FragmentPagerHolder extends Fragment {
+public class FragmentPagerHolder extends Fragment implements FragmentCommunicator {
 
     @BindView(R.id.suraViewPager)
     ViewPager suraViewPager;
@@ -27,8 +29,9 @@ public class FragmentPagerHolder extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pager, container, false);
         ButterKnife.bind(this, view);
 
-        if (getActivity().getIntent() != null) {
-            positionNumber = getActivity().getIntent().getIntExtra(Commons.ITEM_POSITION, 2);
+        if (getArguments() != null) {
+            positionNumber = getArguments().getInt(Commons.ITEM_POSITION, 6);
+            Log.d("Position", "Position Number " + positionNumber);
         }
 
         suraViewPager.setAdapter(new SurahPagerAdapter(getActivity().getSupportFragmentManager()));
@@ -38,9 +41,13 @@ public class FragmentPagerHolder extends Fragment {
         return view;
     }
 
+    @Override
+    public void updateSuraListPostion(int position, String direction) {
+        //not applicable here
+    }
 
-    public void updatePagerPosition(int position) {
+    @Override
+    public void updatePagerPostion(int position) {
         suraViewPager.setCurrentItem(position);
-
     }
 }

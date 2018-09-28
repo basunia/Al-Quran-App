@@ -16,7 +16,6 @@ public class SurahPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
         Bundle bundle = new Bundle();
         bundle.putInt(Commons.ITEM_POSITION, position + 1);
         Fragment fragment = new SurahdetailFragment();
@@ -26,6 +25,6 @@ public class SurahPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 36;
+        return 10;
     }
 }

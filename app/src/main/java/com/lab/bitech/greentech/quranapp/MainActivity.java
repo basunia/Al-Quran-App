@@ -3,6 +3,7 @@ package com.lab.bitech.greentech.quranapp;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.lab.bitech.greentech.quranapp.pager.FragmentPagerHolder;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, PropagatePosition {
+
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +63,19 @@ public class MainActivity extends AppCompatActivity
                 || orientation == Surface.ROTATION_270) {
             // TODO: add logic for landscape mode here
             getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolderDetail, new FragmentPagerHolder()).commit();
+
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolderDetail, new FragmentPagerHolder()).commit();
+        //getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolder, new SuraListFragment()).commit();
 
     }
 
     @Override
     public void sendPositionToPagerHolder(int position) {
-        FragmentPagerHolder mPagerHolder = (FragmentPagerHolder)getSupportFragmentManager().findFragmentById(R.id.fragmentHolderDetail);
-        mPagerHolder.updatePagerPosition(position);
+//        FragmentPagerHolder mPagerHolder = (FragmentPagerHolder)getSupportFragmentManager().findFragmentById(R.id.fragmentHolderDetail);
+//        mPagerHolder.updatePagerPostion(position);
+        FragmentCommunicator fragmentCommunicator = (FragmentCommunicator) getSupportFragmentManager().findFragmentById(R.id.fragmentHolderDetail);
+        fragmentCommunicator.updatePagerPostion(position);
+
 
     }
 
@@ -132,5 +139,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentHolder) != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager().findFragmentById(R.id.fragmentHolder).getFragmentManager();
+            if (fragmentManager.getBackStackEntryCount() > 0)
+                fragmentManager.popBackStack();
+        }
     }
 }

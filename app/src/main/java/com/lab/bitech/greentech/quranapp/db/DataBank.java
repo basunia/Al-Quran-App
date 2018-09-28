@@ -148,8 +148,31 @@ public class DataBank {
 
     }
 
+    public SurahNameModel getSurah(int surahId) {
+        SQLiteDatabase db = openHelper.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_SURA_LIST, null, SURA_LIST_COLUMN_ID + "=?", new String[]{String.valueOf(surahId)}, null, null, null);
 
-    /*public SurahDetailModel getSurahWithEnglishTranslation(int surahId) {
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        if (cursor != null) {
+            // prepare time object
+            SurahNameModel surah = new SurahNameModel(
+                    cursor.getString(cursor.getColumnIndex(SURAH_NAME)));
+
+            // close the db connection
+            cursor.close();
+            db.close();
+
+            return surah;
+        }
+
+        return null;
+
+    }
+
+
+    /*public SurahDetailModel getSurah(int surahId) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         Cursor cursor = db.query(TABLE_DUA_RECORDS, null, DUA_RECORDS_COLUMN_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
 

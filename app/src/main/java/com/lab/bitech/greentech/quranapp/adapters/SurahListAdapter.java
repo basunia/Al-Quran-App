@@ -3,6 +3,7 @@ package com.lab.bitech.greentech.quranapp.adapters;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.lab.bitech.greentech.quranapp.R;
 import com.lab.bitech.greentech.quranapp.fragments.SurahdetailFragment;
 import com.lab.bitech.greentech.quranapp.models.SurahNameModel;
 import com.lab.bitech.greentech.quranapp.pager.FragmentPagerHolder;
+import com.lab.bitech.greentech.quranapp.utils.Commons;
 
 import java.util.List;
 
@@ -28,13 +30,13 @@ public class SurahListAdapter extends RecyclerView.Adapter<SurahListAdapter.MyVi
 
     private MainActivity mainActivity;
     private List<SurahNameModel> surahNameList;
-    //private PropagatePosition mPropagatePosition;
+    private PropagatePosition mPropagatePosition;
     //private int singlePagerPosition = 0;
 
     public SurahListAdapter(Context context, List<SurahNameModel> list, PropagatePosition mPropagatePosition, int singlePagerPosition) {
         this.mainActivity = (MainActivity) context;
         this.surahNameList = list;
-        //this.mPropagatePosition = mPropagatePosition;
+        this.mPropagatePosition = mPropagatePosition;
         //this.singlePagerPosition = singlePagerPosition;
     }
 
@@ -58,12 +60,12 @@ public class SurahListAdapter extends RecyclerView.Adapter<SurahListAdapter.MyVi
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         SurahNameModel surahName = surahNameList.get(position);
-        holder.tvSurahName.setText(surahName.getSurahName());
+        holder.tvSurahName.setText( (position + 1) + "  " + surahName.getSurahName());
 
         holder.tvSurahName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                surahDetailFragment();
+                surahDetailFragment(holder.getAdapterPosition());
             }
         });
 
@@ -74,7 +76,7 @@ public class SurahListAdapter extends RecyclerView.Adapter<SurahListAdapter.MyVi
         return surahNameList.size();
     }
 
-    private void surahDetailFragment() {
+    private void surahDetailFragment(int position) {
         Display display = ((WindowManager) mainActivity.getSystemService(WINDOW_SERVICE))
                 .getDefaultDisplay();
 
@@ -83,9 +85,14 @@ public class SurahListAdapter extends RecyclerView.Adapter<SurahListAdapter.MyVi
         if (orientation == Surface.ROTATION_90
                 || orientation == Surface.ROTATION_270) {
             // TODO: add logic for landscape mode here
-            //mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolderDetail, new FragmentPagerHolder()).addToBackStack(null).commit();
+            mPropagatePosition.sendPositionToPagerHolder(position);
+
         } else {
-            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, new FragmentPagerHolder()).addToBackStack(null).commit();
+            Bundle bundle = new Bundle();
+            bundle.putInt(Commons.ITEM_POSITION, position);
+            FragmentPagerHolder fragmentPagerHolder = new FragmentPagerHolder();
+            fragmentPagerHolder.setArguments(bundle);
+            mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentHolder, fragmentPagerHolder).addToBackStack(null).commit();
         }
     }
 
