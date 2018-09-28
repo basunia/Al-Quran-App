@@ -1,9 +1,11 @@
 package com.lab.bitech.greentech.quranapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, PropagatePosition {
 
     private FragmentManager fragmentManager;
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
 
@@ -52,6 +54,13 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart");
         /*business logic*/
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolder, new SuraListFragment()).commit();
         Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
@@ -65,17 +74,12 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolderDetail, new FragmentPagerHolder()).commit();
 
         }
-        //getSupportFragmentManager().beginTransaction().add(R.id.fragmentHolder, new SuraListFragment()).commit();
-
     }
 
     @Override
     public void sendPositionToPagerHolder(int position) {
-//        FragmentPagerHolder mPagerHolder = (FragmentPagerHolder)getSupportFragmentManager().findFragmentById(R.id.fragmentHolderDetail);
-//        mPagerHolder.updatePagerPostion(position);
         FragmentCommunicator fragmentCommunicator = (FragmentCommunicator) getSupportFragmentManager().findFragmentById(R.id.fragmentHolderDetail);
         fragmentCommunicator.updatePagerPostion(position);
-
 
     }
 
@@ -144,10 +148,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragmentHolder) != null) {
+        /*if (getSupportFragmentManager().findFragmentById(R.id.fragmentHolder) != null) {
             FragmentManager fragmentManager = getSupportFragmentManager().findFragmentById(R.id.fragmentHolder).getFragmentManager();
             if (fragmentManager.getBackStackEntryCount() > 0)
                 fragmentManager.popBackStack();
-        }
+        }*/
     }
 }

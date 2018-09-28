@@ -25,6 +25,6 @@ public class SurahPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 10;
+        return 6;
     }
 }

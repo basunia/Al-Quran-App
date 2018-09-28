@@ -12,21 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lab.bitech.greentech.quranapp.R;
 import com.lab.bitech.greentech.quranapp.adapters.SurahDetailAdapter;
 import com.lab.bitech.greentech.quranapp.db.DataBank;
 import com.lab.bitech.greentech.quranapp.models.SurahDetailModel;
 import com.lab.bitech.greentech.quranapp.utils.Commons;
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.widget.GridLayout.HORIZONTAL;
 
 public class SurahdetailFragment extends Fragment {
 
@@ -52,12 +50,12 @@ public class SurahdetailFragment extends Fragment {
 
         if (getArguments() != null) {
             pagerPosition = getArguments().getInt(Commons.ITEM_POSITION, 1);
-            if ( 1 <= pagerPosition && pagerPosition <= 10)
+            if (1 <= pagerPosition && pagerPosition <= 6)
                 fetchDatabase();
             Log.d("Position", "PagerPosition " + pagerPosition);
         }
 
-        DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), HORIZONTAL);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL);
         recyclerView.addItemDecoration(itemDecor);
 
         //Toast.makeText(getActivity(), "AYAt number" + surahDetailModelList.size(), Toast.LENGTH_SHORT).show();
@@ -68,7 +66,10 @@ public class SurahdetailFragment extends Fragment {
     private void fetchDatabase() {
         DataBank dataBank = new DataBank(getActivity());
         tvSurahName.setText(dataBank.getSurah(pagerPosition).getSurahName());
-        surahDetailModelList.addAll(dataBank.getSurahWithEnglishTranslation(1));
+        if (Prefs.getString(Commons.LANGUAGES, Commons.ENGLISH).equals(Commons.ENGLISH))
+            surahDetailModelList.addAll(dataBank.getSurahWithEnglishTranslation(pagerPosition));
+        else
+            surahDetailModelList.addAll(dataBank.getSurahWithBengaliTranslation(pagerPosition));
         adapter.notifyDataSetChanged();
     }
 }
