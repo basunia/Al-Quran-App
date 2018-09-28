@@ -1,5 +1,7 @@
 package com.lab.bitech.greentech.quranapp;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,13 +20,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.lab.bitech.greentech.quranapp.adapters.SurahDetailAdapter;
 import com.lab.bitech.greentech.quranapp.fragments.SuraListFragment;
 import com.lab.bitech.greentech.quranapp.fragments.SurahdetailFragment;
 import com.lab.bitech.greentech.quranapp.pager.FragmentPagerHolder;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, PropagatePosition {
+        implements NavigationView.OnNavigationItemSelectedListener, PropagatePosition, SurahDetailAdapter.ClipBoard {
 
     private FragmentManager fragmentManager;
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        setUpClipBoard();
 
     }
 
@@ -85,7 +89,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void sendPositionToNumberFragment(int position, String direction) {
-
+        FragmentCommunicator fragmentCommunicator = (FragmentCommunicator) getSupportFragmentManager().findFragmentById(R.id.fragmentHolder);
+        fragmentCommunicator.updateSuraListPostion(position, direction);
     }
 
     @Override
@@ -98,14 +103,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -153,5 +158,21 @@ public class MainActivity extends AppCompatActivity
             if (fragmentManager.getBackStackEntryCount() > 0)
                 fragmentManager.popBackStack();
         }*/
+    }
+
+    public void setAppTitle(String title) {
+        setTitle(title);
+    }
+
+    private android.content.ClipboardManager clipboardManager;
+    private void setUpClipBoard(){
+        clipboardManager = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+    }
+
+    @Override
+    public void copyToClipBoard(String text) {
+        ClipData clipData = ClipData.newPlainText("Source Text", text);
+        clipboardManager.setPrimaryClip(clipData);
+        Toast.makeText(this, "Copied to clipboard!", Toast.LENGTH_SHORT).show();
     }
 }

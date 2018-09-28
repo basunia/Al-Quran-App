@@ -2,6 +2,7 @@ package com.lab.bitech.greentech.quranapp.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,23 +23,27 @@ public class SurahDetailAdapter extends RecyclerView.Adapter<SurahDetailAdapter.
     private Context context;
     private List<SurahDetailModel> surahDetailList;
     private PropagatePosition mPropagatePosition;
-    private int singlePagerPosition = 0;
+    private int singlePagerPosition;
+    private ClipBoard clipBoard;
 
     public SurahDetailAdapter(Context context, List<SurahDetailModel> list, PropagatePosition mPropagatePosition, int singlePagerPosition) {
         this.context = context;
         this.surahDetailList = list;
         this.mPropagatePosition = mPropagatePosition;
         this.singlePagerPosition = singlePagerPosition;
+        this.clipBoard = (ClipBoard) context;
 
         Log.d("shira", "SurahDetailAdapter");
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        ConstraintLayout constraintLayout;
         TextView tvAyat;
         TextView tvTranslation;
 
         public MyViewHolder(View view) {
             super(view);
+            constraintLayout = view.findViewById(R.id.suraDetailLayout);
             tvAyat = view.findViewById(R.id.tvAyat);
             tvTranslation = view.findViewById(R.id.tvTranslation);
         }
@@ -62,21 +67,22 @@ public class SurahDetailAdapter extends RecyclerView.Adapter<SurahDetailAdapter.
         Typeface arabic_font = Typeface.createFromAsset(context.getAssets(), "fonts/trado.ttf");
         holder.tvAyat.setTypeface(arabic_font);
 
-        /*holder.tvItem.setOnClickListener(new View.OnClickListener() {
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //propagate position to PagerHolder fragment thru activity
-                mPropagatePosition.sendPositionToPagerHolder((position));
-
-                //holder.tvItem.setBackgroundColor(Color.BLUE);
+            public void onClick(View view) {
+                clipBoard.copyToClipBoard(String.valueOf(surahDetailList.get(holder.getAdapterPosition()).getAyaatName() + " \n\n" + surahDetailList.get(holder.getAdapterPosition()).getTranslation()));
             }
-        });*/
+        });
 
     }
 
     @Override
     public int getItemCount() {
         return surahDetailList.size();
+    }
+
+    public interface ClipBoard {
+        void copyToClipBoard(String text);
     }
 
 }
