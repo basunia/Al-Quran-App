@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lab.bitech.greentech.quranapp.FragmentCommunicator;
+import com.lab.bitech.greentech.quranapp.MainActivity;
 import com.lab.bitech.greentech.quranapp.PropagatePosition;
 import com.lab.bitech.greentech.quranapp.R;
 import com.lab.bitech.greentech.quranapp.utils.Commons;
@@ -25,6 +28,8 @@ public class FragmentPagerHolder extends Fragment implements FragmentCommunicato
     @BindView(R.id.suraViewPager)
     ViewPager suraViewPager;
     private int positionNumber;
+
+    private MainActivity mainActivity;
 
     @Nullable
     @Override
