@@ -1,2 +1,2 @@
 # Al-Quran-App
-This simple Quran Application with few surahs
+This simple Quran Application contains few surahs.
